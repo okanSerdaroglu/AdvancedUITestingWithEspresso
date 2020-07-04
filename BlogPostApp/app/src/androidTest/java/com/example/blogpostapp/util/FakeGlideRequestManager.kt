@@ -10,7 +10,7 @@ class FakeGlideRequestManager
 constructor() : GlideManager {
 
     override fun setImage(imageUrl: String, imageView: ImageView) {
-        
+
     }
 
 }
