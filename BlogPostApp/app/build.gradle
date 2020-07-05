@@ -15,7 +15,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.example.blogpostapp.MockTestRunner"
     }
 
     buildTypes {
@@ -122,5 +122,6 @@ dependencies {
     // material dialogs
     def matieral_dialogs_version = "3.1.0"
     implementation "com.afollestad.material-dialogs:core:$matieral_dialogs_version"
+
 
 }
