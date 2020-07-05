@@ -1,6 +1,8 @@
 package com.example.blogpostapp.di
 
 import android.app.Application
+import com.example.blogpostapp.api.FakeApiService
+import com.example.blogpostapp.repository.FakeMainRepositoryImpl
 import dagger.BindsInstance
 import dagger.Component
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -13,14 +15,16 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [
-        FragmentModule::class,
-        ViewModelModule::class,
-        InternalBindingsModule::class,
-        AppModule::class,
-        RepositoryModule::class
+        TestFragmentModule::class,
+        TestViewModelModule::class,
+        TestAppModule::class
     ]
 )
 interface TestAppComponent : AppComponent {
+
+    val apiService: FakeApiService
+
+    val mainRepository: FakeMainRepositoryImpl
 
     @Component.Builder
     interface Builder {

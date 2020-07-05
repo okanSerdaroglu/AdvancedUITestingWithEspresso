@@ -1,6 +1,6 @@
 package com.example.blogpostapp
 
-import com.example.blogpostapp.di.DaggerAppComponent
+import com.example.blogpostapp.di.DaggerTestAppComponent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
@@ -9,7 +9,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 class TestBaseApplication : BaseApplication() {
 
     override fun initAppComponent() {
-        appComponent = DaggerAppComponent.builder()
+        appComponent = DaggerTestAppComponent.builder()
             .application(this)
             .build()
     }
