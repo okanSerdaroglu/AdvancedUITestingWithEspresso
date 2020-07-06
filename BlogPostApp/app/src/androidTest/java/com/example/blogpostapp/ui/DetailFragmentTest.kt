@@ -9,11 +9,9 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.blogpostapp.R
 import com.example.blogpostapp.TestBaseApplication
-import com.example.blogpostapp.api.FakeApiService
 import com.example.blogpostapp.di.TestAppComponent
 import com.example.blogpostapp.fragments.FakeMainFragmentFactory
 import com.example.blogpostapp.models.BlogPost
-import com.example.blogpostapp.repository.FakeMainRepositoryImpl
 import com.example.blogpostapp.ui.viewmodel.setSelectedBlogPost
 import com.example.blogpostapp.util.Constants.BLOG_POSTS_DATA_FILENAME
 import com.example.blogpostapp.util.Constants.CATEGORIES_DATA_FILENAME
@@ -36,7 +34,7 @@ import javax.inject.Inject
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4ClassRunner::class)
-class DetailFragmentTest {
+class DetailFragmentTest : BaseMainActivityTests() {
 
     @Inject
     lateinit var viewModelFactory: FakeMainViewModelFactory
@@ -111,37 +109,10 @@ class DetailFragmentTest {
 
     }
 
-    private fun configureFakeApiService(
-        blogDataSource: String? = null,
-        categoriesDataSource: String? = null,
-        networkDelay: Long? = null,
-        application: TestBaseApplication
-    ): FakeApiService {
-        val apiService = (application.appComponent as TestAppComponent).apiService
-        blogDataSource?.let {
-            apiService.blogPostJsonFileName = it
-        }
-        categoriesDataSource?.let {
-            apiService.categoriesFileName = it
-        }
-        networkDelay?.let {
-            apiService.networkDelay = it
-        }
-        return apiService
-    }
-
-    private fun injectTest(application: TestBaseApplication) {
+    override fun injectTest(application: TestBaseApplication) {
         (application.appComponent as TestAppComponent)
             .inject(this)
     }
 
-    private fun configureFakeRepository(
-        apiService: FakeApiService,
-        application: TestBaseApplication
-    ): FakeMainRepositoryImpl {
-        val mainRepository = (application.appComponent as TestAppComponent).mainRepository
-        mainRepository.apiService = apiService
-        return mainRepository
-    }
 
 }
