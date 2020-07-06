@@ -3,6 +3,7 @@ package com.example.blogpostapp.di
 import android.app.Application
 import com.example.blogpostapp.api.FakeApiService
 import com.example.blogpostapp.repository.FakeMainRepositoryImpl
+import com.example.blogpostapp.ui.DetailFragmentTest
 import dagger.BindsInstance
 import dagger.Component
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -34,5 +35,7 @@ interface TestAppComponent : AppComponent {
 
         fun build(): TestAppComponent
     }
+
+    fun inject(detailFragmentTest: DetailFragmentTest)
 
 }
