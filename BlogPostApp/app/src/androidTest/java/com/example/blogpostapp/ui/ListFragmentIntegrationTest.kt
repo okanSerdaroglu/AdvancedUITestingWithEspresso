@@ -14,6 +14,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.example.blogpostapp.R
 import com.example.blogpostapp.TestBaseApplication
 import com.example.blogpostapp.di.TestAppComponent
+import com.example.blogpostapp.ui.BlogPostListAdapter.*
 import com.example.blogpostapp.ui.viewmodel.state.MainViewState
 import com.example.blogpostapp.util.Constants
 import com.example.blogpostapp.util.EspressoIdlingResourceRule
@@ -139,7 +140,7 @@ class ListFragmentIntegrationTest : BaseMainActivityTests() {
         recyclerView.check(matches(isDisplayed()))
 
         recyclerView.perform(
-            RecyclerViewActions.scrollToPosition<BlogPostListAdapter.BlogPostViewHolder>(
+            RecyclerViewActions.scrollToPosition<BlogPostViewHolder>(
                 5
             )
         )
@@ -147,13 +148,13 @@ class ListFragmentIntegrationTest : BaseMainActivityTests() {
         onView(withText("Mountains in Washington")).check(matches(isDisplayed()))
 
         recyclerView.perform(
-            RecyclerViewActions.scrollToPosition<BlogPostListAdapter.BlogPostViewHolder>(8)
+            RecyclerViewActions.scrollToPosition<BlogPostViewHolder>(8)
         )
 
         onView(withText("Blake Posing for his Website")).check(matches(isDisplayed()))
 
         recyclerView.perform(
-            RecyclerViewActions.scrollToPosition<BlogPostListAdapter.BlogPostViewHolder>(0)
+            RecyclerViewActions.scrollToPosition<BlogPostViewHolder>(0)
         )
 
         onView(withText("Vancouver PNE 2019")).check(matches(isDisplayed()))
@@ -166,8 +167,10 @@ class ListFragmentIntegrationTest : BaseMainActivityTests() {
     @Test
     fun checkListData_onCategoryChange_toEarthPorn() {
         // setup
-        val app = InstrumentationRegistry.getInstrumentation()
+        val app = InstrumentationRegistry
+            .getInstrumentation()
             .targetContext.applicationContext as TestBaseApplication
+
 
         val apiService = configureFakeApiService(
             blogDataSource = Constants.BLOG_POSTS_DATA_FILENAME,
@@ -187,6 +190,7 @@ class ListFragmentIntegrationTest : BaseMainActivityTests() {
 
         scenario.onActivity { mainActivity ->
             val toolbar: Toolbar = mainActivity.findViewById(R.id.tool_bar)
+
             mainActivity.viewModel.viewState.observe(mainActivity,
                 object : Observer<MainViewState> {
                     override fun onChanged(viewState: MainViewState?) {
@@ -198,20 +202,24 @@ class ListFragmentIntegrationTest : BaseMainActivityTests() {
                 })
         }
 
-        val CATEGORY_NAME = "earthporn"
-        onView(withText(CATEGORY_NAME))
-            .perform(click())
+        val categoryName = "earthporn"
+        onView(withText(categoryName)).perform(click())
 
-        onView(withText("Mountains in Washington"))
-            .check(matches(isDisplayed()))
-
-        onView(withText("France Mountain Range"))
-            .check(matches(isDisplayed()))
-
-        onView(withText("Lounging Dogs"))
-            .check(doesNotExist())
+        val recyclerView = onView(withId(R.id.recycler_view))
+        recyclerView.check(matches(isDisplayed()))
 
 
+        recyclerView.perform(
+            RecyclerViewActions.scrollToPosition<BlogPostViewHolder>(0)
+        )
+        onView(withText("Mountains in Washington")).check(matches(isDisplayed()))
+
+        recyclerView.perform(
+            RecyclerViewActions.scrollToPosition<BlogPostViewHolder>(1)
+        )
+        onView(withText("France Mountain Range")).check(matches(isDisplayed()))
+
+        onView(withText("Lounging Dogs")).check(doesNotExist())
     }
 
     @Test
@@ -240,7 +248,7 @@ class ListFragmentIntegrationTest : BaseMainActivityTests() {
             .check(matches(isDisplayed()))
 
         onView(withId(R.id.recycler_view)).perform(
-            RecyclerViewActions.scrollToPosition<BlogPostListAdapter.BlogPostViewHolder>(8)
+            RecyclerViewActions.scrollToPosition<BlogPostViewHolder>(8)
         )
 
         onView(withText("Blake Posing for his Website")).check(matches(isDisplayed()))
