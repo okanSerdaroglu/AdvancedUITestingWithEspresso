@@ -3,10 +3,7 @@ package com.example.blogpostapp.di
 import android.app.Application
 import com.example.blogpostapp.api.FakeApiService
 import com.example.blogpostapp.repository.FakeMainRepositoryImpl
-import com.example.blogpostapp.ui.DetailFragmentTest
-import com.example.blogpostapp.ui.ListFragmentErrorTest
-import com.example.blogpostapp.ui.ListFragmentIntegrationTest
-import com.example.blogpostapp.ui.MainNavigationTest
+import com.example.blogpostapp.ui.*
 import dagger.BindsInstance
 import dagger.Component
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -46,5 +43,7 @@ interface TestAppComponent : AppComponent {
     fun inject(listFragmentErrorTests: ListFragmentErrorTest)
 
     fun inject(mainNavigationTest: MainNavigationTest)
+
+    fun inject(listFragmentNavigationTest: ListFragmentNavigationTest)
 
 }
