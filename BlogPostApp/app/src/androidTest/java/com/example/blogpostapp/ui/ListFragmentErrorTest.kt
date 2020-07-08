@@ -55,6 +55,38 @@ class ListFragmentErrorTest : BaseMainActivityTests() {
 
     }
 
+
+    @Test
+    fun doesNetworkTimeout_NetworkTimeoutError() {
+        // setup
+        val app = InstrumentationRegistry.getInstrumentation()
+            .targetContext.applicationContext as TestBaseApplication
+
+        val apiService = configureFakeApiService(
+            blogDataSource = Constants.BLOG_POSTS_DATA_FILENAME,
+            categoriesDataSource = Constants.CATEGORIES_DATA_FILENAME,
+            networkDelay = 4000L,
+            application = app
+        )
+
+        configureFakeRepository(
+            apiService = apiService,
+            application = app
+        )
+
+        injectTest(app)
+
+        val scenario = launchActivity<MainActivity>()
+
+        onView(withText(R.string.text_error))
+            .check(matches(isDisplayed()))
+
+        onView(withSubstring(Constants.NETWORK_ERROR_TIMEOUT))
+            .check(matches(isDisplayed()))
+
+    }
+
+
     override fun injectTest(application: TestBaseApplication) {
         (application.appComponent as TestAppComponent)
             .inject(this)
