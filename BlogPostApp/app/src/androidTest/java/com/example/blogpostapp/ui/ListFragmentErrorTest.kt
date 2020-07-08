@@ -9,6 +9,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.example.blogpostapp.R
 import com.example.blogpostapp.TestBaseApplication
 import com.example.blogpostapp.di.TestAppComponent
+import com.example.blogpostapp.ui.viewmodel.state.MainStateEvent
 import com.example.blogpostapp.util.Constants
 import com.example.blogpostapp.util.EspressoIdlingResourceRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -82,6 +83,66 @@ class ListFragmentErrorTest : BaseMainActivityTests() {
             .check(matches(isDisplayed()))
 
         onView(withSubstring(Constants.NETWORK_ERROR_TIMEOUT))
+            .check(matches(isDisplayed()))
+
+    }
+
+    @Test
+    fun isErrorDialogShown_CannotRetrieveCategories() {
+        // setup
+        val app = InstrumentationRegistry.getInstrumentation()
+            .targetContext.applicationContext as TestBaseApplication
+
+        val apiService = configureFakeApiService(
+            blogDataSource = Constants.BLOG_POSTS_DATA_FILENAME,
+            categoriesDataSource = Constants.SERVER_ERROR_FILENAME,
+            networkDelay = 0L,
+            application = app
+        )
+
+        configureFakeRepository(
+            apiService = apiService,
+            application = app
+        )
+
+        injectTest(app)
+
+        val scenario = launchActivity<MainActivity>()
+
+        onView(withText(R.string.text_error))
+            .check(matches(isDisplayed()))
+
+        onView(withSubstring(MainStateEvent.GetCategories().errorInfo()))
+            .check(matches(isDisplayed()))
+
+    }
+
+    @Test
+    fun isErrorDialogShown_CannotRetrieveBlogPosts() {
+        // setup
+        val app = InstrumentationRegistry.getInstrumentation()
+            .targetContext.applicationContext as TestBaseApplication
+
+        val apiService = configureFakeApiService(
+            blogDataSource = Constants.SERVER_ERROR_FILENAME,
+            categoriesDataSource = Constants.CATEGORIES_DATA_FILENAME,
+            networkDelay = 0L,
+            application = app
+        )
+
+        configureFakeRepository(
+            apiService = apiService,
+            application = app
+        )
+
+        injectTest(app)
+
+        val scenario = launchActivity<MainActivity>()
+
+        onView(withText(R.string.text_error))
+            .check(matches(isDisplayed()))
+
+        onView(withSubstring(MainStateEvent.GetAllBlogs().errorInfo()))
             .check(matches(isDisplayed()))
 
     }
